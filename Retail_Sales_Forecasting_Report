@@ -1,0 +1,73 @@
+# UK Retail Sales Analysis & Forecasting
+
+## Project overview
+This project analyses the UK's retail sales volume index and builds a short-term monthly forecast using the Office for National Statistics (ONS) Retail Sales dataset.
+
+## Data source and selection
+- Publisher: UK Office for National Statistics (ONS)
+- Dataset: Retail sales (current dataset)
+- Downloaded source file: `drsi.csv`
+- Selected series: **J467 — Volume Seasonally Adjusted: All Retailers excluding fuel: All Business Index**
+- Period analysed: January 2021 to September 2026
+- Observations: 69
+- Frequency: Monthly
+- Unit: Index, base year = 100
+
+The selected series measures retail sales volume rather than sales value. Excluding automotive fuel also avoids mixing fuel retailing into the headline series. The data are already seasonally adjusted, so no additional seasonal adjustment was applied.
+
+## Methodology
+1. Inspected the ONS workbook-style CSV structure and identified its metadata rows.
+2. Selected the J467 time series and retained observations from January 2021 onward.
+3. Converted the period labels to dates and the index values to numeric format.
+4. Checked missing values and chronological order.
+5. Visualised the monthly index over time.
+6. Used a chronological holdout: the final 12 months were reserved for testing.
+7. Fitted an additive Holt-Winters Exponential Smoothing model with a 12-month seasonal cycle.
+8. Evaluated the model using MAE and RMSE.
+9. Re-fitted the model on the full dataset and generated a six-month forecast.
+
+## Data quality
+- Cleaned observations: 69
+- Missing values in selected series after cleaning: 0
+- First observation: January 2021 (100.8)
+- Latest observation: September 2026 (104.2)
+
+## Forecast model evaluation
+The model was evaluated on the final 12 observations, which were not used during model fitting.
+
+| Metric | Result |
+|---|---:|
+| Mean Absolute Error (MAE) | 0.88 index points |
+| Root Mean Squared Error (RMSE) | 1.08 index points |
+
+These are errors measured in **index points**, not pounds or percentage points. They describe performance on this particular 12-month test period and do not guarantee future accuracy.
+
+## Six-month forecast
+The accompanying file `UK_Retail_Sales_Forecast.csv` contains the six monthly point forecasts generated after fitting the model to all available observations.
+
+| Forecast_Period   |   Forecast_Retail_Volume_Index |
+|:------------------|-------------------------------:|
+| 2026-10-01        |                         104.26 |
+| 2026-11-01        |                         104.12 |
+| 2026-12-01        |                         103.36 |
+| 2027-01-01        |                         103.84 |
+| 2027-02-01        |                         104.27 |
+| 2027-03-01        |                         104.54 |
+
+## Business interpretation
+The index can help retailers and analysts monitor the direction of real retail sales volumes and plan broad inventory, staffing, and promotional scenarios. It is a sector-level indicator: it cannot identify individual companies, products, or store-level demand.
+
+Forecasts should be treated as planning estimates, not certain outcomes. Unexpected economic conditions, price changes, consumer confidence, and revisions to ONS data may affect actual results.
+
+## Limitations
+- The series is a national retail-sector index, not company- or product-level sales.
+- Only one selected ONS series was modelled.
+- The evaluation period contains 12 months; performance may differ in other periods.
+- The forecast is a statistical extrapolation and does not include explanatory variables such as inflation, wages, or consumer confidence.
+
+## Tools
+Python, Pandas, NumPy, Matplotlib, Statsmodels, Scikit-learn.
+
+## Source
+ONS — Retail sales dataset: https://www.ons.gov.uk/businessindustryandtrade/retailindustry/datasets/retailsales/current
+
